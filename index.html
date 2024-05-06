@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Kana Learning Thing</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "Roboto", sans-serif;
+        }
+
+        #kana-container {
+            font-size: 40em;
+            width: 100%;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #input-field {
+            font-size: 2em;
+        }
+        
+        #last-field {
+            font-size: 3em;
+        }
+
+        #last-container {
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="last-container">
+        <span id="last-field"></span>
+    </div>
+    <div id="kana-container">
+        <span id="kana">
+            う
+        </span>
+    </div>
+    <div>
+        <span id="input-field"></span>
+    </div>
+    <script>
+        const hiragana = [
+            [["あ", "a" ], 1],[["い", "i"  ], 1],[["う", "u"  ], 1],[["え", "e" ],1],[["お", "o" ], 1],
+       /*k*/[["か", "ka"], 1],[["き", "ki" ], 1],[["く", "ku" ], 1],[["け", "ke"],1],[["こ", "ko"], 1],
+       /*s*/[["さ", "sa"], 1],[["し", "shi"], 1],[["す", "su" ], 1],[["せ", "se"],1],[["そ", "so"], 1],
+       /*t*/[["た", "ta"], 1],[["ち", "chi"], 1],[["つ", "tsu"], 1],[["て", "te"],1],[["と", "to"], 1],
+       /*n*/[["な", "na"], 1],[["に", "ni" ], 1],[["ぬ", "nu" ], 1],[["ね", "ne"],1],[["の", "no"], 1],
+       /*h*/[["は", "ha"], 1],[["ひ", "hi" ], 1],[["ふ", "fu" ], 1],[["へ", "he"],1],[["ほ", "ho"], 1],
+       /*m*/[["ま", "ma"], 1],[["み", "mi" ], 1],[["む", "mu" ], 1],[["め", "me"],1],[["も", "mo"], 1],
+       /*y*/[["や", "ya"], 1], /*あ*/            [["ゆ", "yu" ], 1], /*あ*/          [["よ", "yo"], 1],
+       /*r*/[["ら", "ra"], 1],[["り", "ri" ], 1],[["る", "ru" ], 1],[["れ", "re"],1],[["ろ", "ro"], 1],
+       /*w*/[["わ", "wa"], 1],[["ゐ", "i"  ], 1],/*あ*/             [["ゑ", "e" ],1],[["を", "o" ], 1]]
+
+        const kanaSpan = document.getElementById("kana");
+        const kanaContainer = document.getElementById("kana-container");
+        const inputField = document.getElementById("input-field");
+        const lastField = document.getElementById("last-field");
+
+        function scaleText(container) {
+            
+            let fontSize = 50;
+            container.style.fontSize = fontSize + "em";
+
+            while (container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight) {
+                fontSize-=.1;
+                container.style.fontSize = fontSize + 'em';
+            }
+        }
+
+        let current = hiragana[0][0];
+        let currentIndex = 0;
+
+        function getRandomElement(array) {
+            const randomIndex = Math.floor(Math.random() * array.length);
+
+            return array[randomIndex];
+        }
+
+        function selectRandomWithWeight(array) {
+        const totalWeight = array.reduce((acc, [value, weight]) => acc + weight, 0);
+            
+        const randomNum = Math.random() * totalWeight;
+            
+        let accumulatedWeight = 0;
+        let i = 0;
+        for (const [value, weight] of array) {
+            accumulatedWeight += weight; 
+            if (randomNum <= accumulatedWeight) {
+                return [value, i];
+            }
+            i++;
+        }
+
+        // If for some reason we don't find a value, return the last one
+        return [array[array.length - 1][0],array.length - 1];
+        }
+
+        function lerp(start, end, alpha) {
+           return (1 - alpha) * start + alpha * end;
+        }
+
+        function selectNew(arr) {
+            lastField.innerText = current.join(" - ");
+
+            let result = selectRandomWithWeight(arr);
+
+            current = result[0];
+            currentIndex = result[1];
+
+            kanaSpan.innerText = current[0];
+            scaleText(kanaContainer);
+        }
+
+        window.addEventListener("load", e => {
+            scaleText(kanaContainer);
+        })
+
+        window.addEventListener("resize", e => {
+            scaleText(kanaContainer);
+        })
+
+        let input = "";
+
+        selectNew(hiragana);
+
+        document.addEventListener("keydown", e => {
+            if (e.key === "Backspace") {
+                input = input.slice(0,-1);
+                hiragana[currentIndex][1] += .25;
+            }
+            else if (e.keyCode >= 48 && e.keyCode <= 90)
+                input += e.key;
+
+            if (e.key === "Enter" && current[1].length != 1) { 
+                input += current[1][0];
+                hiragana[currentIndex][1] += 1;
+            }
+
+            if (current) if (input.endsWith(current[1])) {
+                hiragana[currentIndex][1] = lerp(hiragana[currentIndex][1],1,.5);
+
+                selectNew(hiragana);
+                input = "";
+            }
+
+            inputField.innerText = input;
+        })
+    </script>
+</body>
+</html>
