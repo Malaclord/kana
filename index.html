@@ -65,95 +65,99 @@
         const inputField = document.getElementById("input-field");
         const lastField = document.getElementById("last-field");
 
-        function scaleText(container) {
-            
-            let fontSize = 50;
-            container.style.fontSize = fontSize + "em";
+        const start = (kana) => {
+            function scaleText(container) {
+                
+                let fontSize = 50;
+                container.style.fontSize = fontSize + "em";
 
-            while (container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight) {
-                fontSize-=.1;
-                container.style.fontSize = fontSize + 'em';
-            }
-        }
-
-        let current = hiragana[0][0];
-        let currentIndex = 0;
-
-        function getRandomElement(array) {
-            const randomIndex = Math.floor(Math.random() * array.length);
-
-            return array[randomIndex];
-        }
-
-        function selectRandomWithWeight(array) {
-        const totalWeight = array.reduce((acc, [value, weight]) => acc + weight, 0);
-            
-        const randomNum = Math.random() * totalWeight;
-            
-        let accumulatedWeight = 0;
-        let i = 0;
-        for (const [value, weight] of array) {
-            accumulatedWeight += weight; 
-            if (randomNum <= accumulatedWeight) {
-                return [value, i];
-            }
-            i++;
-        }
-
-        // If for some reason we don't find a value, return the last one
-        return [array[array.length - 1][0],array.length - 1];
-        }
-
-        function lerp(start, end, alpha) {
-           return (1 - alpha) * start + alpha * end;
-        }
-
-        function selectNew(arr) {
-            lastField.innerText = current.join(" - ");
-
-            let result = selectRandomWithWeight(arr);
-
-            current = result[0];
-            currentIndex = result[1];
-
-            kanaSpan.innerText = current[0];
-            scaleText(kanaContainer);
-        }
-
-        window.addEventListener("load", e => {
-            scaleText(kanaContainer);
-        })
-
-        window.addEventListener("resize", e => {
-            scaleText(kanaContainer);
-        })
-
-        let input = "";
-
-        selectNew(hiragana);
-
-        document.addEventListener("keydown", e => {
-            if (e.key === "Backspace") {
-                input = input.slice(0,-1);
-                hiragana[currentIndex][1] += .25;
-            }
-            else if (e.keyCode >= 48 && e.keyCode <= 90)
-                input += e.key;
-
-            if (e.key === "Enter" && current[1].length != 1) { 
-                input += current[1][0];
-                hiragana[currentIndex][1] += 1;
+                while (container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight) {
+                    fontSize-=.1;
+                    container.style.fontSize = fontSize + 'em';
+                }
             }
 
-            if (current) if (input.endsWith(current[1])) {
-                hiragana[currentIndex][1] = lerp(hiragana[currentIndex][1],1,.5);
+            let current = kana[0][0];
+            let currentIndex = 0;
 
-                selectNew(hiragana);
-                input = "";
+            function getRandomElement(array) {
+                const randomIndex = Math.floor(Math.random() * array.length);
+
+                return array[randomIndex];
             }
 
-            inputField.innerText = input;
-        })
+            function selectRandomWithWeight(array) {
+            const totalWeight = array.reduce((acc, [value, weight]) => acc + weight, 0);
+
+            const randomNum = Math.random() * totalWeight;
+
+            let accumulatedWeight = 0;
+            let i = 0;
+            for (const [value, weight] of array) {
+                accumulatedWeight += weight; 
+                if (randomNum <= accumulatedWeight) {
+                    return [value, i];
+                }
+                i++;
+            }
+
+            // If for some reason we don't find a value, return the last one
+            return [array[array.length - 1][0],array.length - 1];
+            }
+
+            function lerp(start, end, alpha) {
+               return (1 - alpha) * start + alpha * end;
+            }
+
+            function selectNew(arr) {
+                lastField.innerText = current.join(" - ");
+
+                let result = selectRandomWithWeight(arr);
+
+                current = result[0];
+                currentIndex = result[1];
+
+                kanaSpan.innerText = current[0];
+                scaleText(kanaContainer);
+            }
+
+            window.addEventListener("load", e => {
+                scaleText(kanaContainer);
+            })
+
+            window.addEventListener("resize", e => {
+                scaleText(kanaContainer);
+            })
+
+            let input = "";
+
+            selectNew(kana);
+
+            document.addEventListener("keydown", e => {
+                if (e.key === "Backspace") {
+                    input = input.slice(0,-1);
+                    kana[currentIndex][1] += .25;
+                }
+                else if (e.keyCode >= 48 && e.keyCode <= 90)
+                    input += e.key;
+
+                if (e.key === "Enter" && current[1].length != 1) { 
+                    input += current[1][0];
+                    kana[currentIndex][1] += 1;
+                }
+
+                if (current) if (input.endsWith(current[1])) {
+                    kana[currentIndex][1] = lerp(kana[currentIndex][1],1,.5);
+
+                    selectNew(kana);
+                    input = "";
+                }
+
+                inputField.innerText = input;
+            })
+        }
+
+        start(hiragana);
     </script>
 </body>
 </html>
