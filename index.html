@@ -111,6 +111,14 @@
             selectList.style.display = "";
         }
 
+        window.addEventListener("load", e => {
+                scaleText(kanaContainer);
+            })
+
+        window.addEventListener("resize", e => {
+            scaleText(kanaContainer);
+        })
+
 
         const start = (kanaSouce) => {
             const kana = kanaSouce.map(k => {
@@ -172,19 +180,13 @@
                 scaleText(kanaContainer);
             }
 
-            window.addEventListener("load", e => {
-                scaleText(kanaContainer);
-            })
 
-            window.addEventListener("resize", e => {
-                scaleText(kanaContainer);
-            })
 
             let input = "";
 
             selectNew(kana);
 
-            document.addEventListener("keydown", e => {
+            document.onkeydown = (e) => {
                 if (e.key === "Backspace") {
                     input = input.slice(0,-1);
                     kana[currentIndex][1] += .25;
@@ -205,7 +207,7 @@
                 }
 
                 inputField.innerText = input;
-            })
+            }
         }
 
         kanaTables.forEach(table => {
