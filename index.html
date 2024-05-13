@@ -32,6 +32,14 @@
 
         #input-field {
             font-size: 2em;
+
+            border: 0;
+            width: 100%;
+        }
+
+        #input-field:focus {
+            border: none;
+            outline: none;
         }
         
         #last-field {
@@ -73,16 +81,16 @@
                 :)
             </span>
         </div>
-        
+        <div>
+            <input id="input-field">
+        </div>
     </div>
     <ul id="select-list">
         <li>
             <h1>Hi</h1>
         </li>
     </ul>
-    <div>
-        <span id="input-field"> </span>
-    </div>
+
 
     
 
@@ -101,6 +109,8 @@
         const selectList = document.getElementById("select-list");
         const backButton = document.getElementById("back-button");
         const app = document.getElementById("app");
+
+        inputField.value = "";
 
         app.style.display = "none";
         backButton.style.display = "none";
@@ -182,31 +192,27 @@
 
 
 
-            let input = "";
 
             selectNew(kana);
 
             document.onkeydown = (e) => {
-                if (e.key === "Backspace") {
-                    input = input.slice(0,-1);
-                    kana[currentIndex][1] += .25;
-                }
-                else if (e.keyCode >= 48 && e.keyCode <= 90)
-                    input += e.key;
+                inputField.focus()
 
                 if (e.key === "Enter" && current[1].length != 1) { 
-                    input += current[1][0];
+                    inputField.value += current[1][0];
                     kana[currentIndex][1] += 1;
                 }
 
-                if (current) if (current.slice(1).filter(s => input.endsWith(s)).length > 0) {
+                
+            }
+
+            inputField.oninput = (e) => {
+                if (current) if (current.slice(1).filter(s => inputField.value.endsWith(s)).length > 0) {
                     kana[currentIndex][1] = lerp(kana[currentIndex][1],1,.5);
 
                     selectNew(kana);
-                    input = "";
+                    inputField.value = "";
                 }
-
-                inputField.innerText = input;
             }
         }
 
