@@ -147,13 +147,12 @@
             scaleText(kanaContainer);
         })
 
-
         const start = (kanaSouce) => {
             const kana = kanaSouce.map(k => {
                 return [k,1]
             });
         
-
+            inputField.focus();
 
             let current = kana[0][0];
             let currentIndex = 0;
