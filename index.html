@@ -126,9 +126,22 @@
             selectList.style.display = "";
         }
 
+        function scaleText(container) {
+                
+                let fontSize = 50;
+                container.style.fontSize = fontSize + "em";
+
+                while ((container.scrollWidth > container.clientWidth || document.body.scrollHeight > window.innerHeight) && fontSize > 0) {
+                    console.log(`${document.body.scrollHeight}; ${window.innerHeight}`)
+
+                    fontSize-=1;
+                    container.style.fontSize = fontSize + 'em';
+                }
+        }
+
         window.addEventListener("load", e => {
-                scaleText(kanaContainer);
-            })
+            scaleText(kanaContainer);
+        })
 
         window.addEventListener("resize", e => {
             scaleText(kanaContainer);
@@ -140,16 +153,7 @@
                 return [k,1]
             });
         
-            function scaleText(container) {
-                
-                let fontSize = 50;
-                container.style.fontSize = fontSize + "em";
 
-                while (container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight) {
-                    fontSize-=.1;
-                    container.style.fontSize = fontSize + 'em';
-                }
-            }
 
             let current = kana[0][0];
             let currentIndex = 0;
