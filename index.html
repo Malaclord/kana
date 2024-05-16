@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syllabary Learning Thing</title>
+    <title>Script Learning Thing</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
@@ -28,6 +28,17 @@
 
         a {
             color: #e8e6e3;
+        }
+
+        .script-list-element {
+            display: flex;
+            align-items: center;
+        }
+
+        .script-lang-name {
+            margin-left: 10px;
+            color: #999;
+            font-style: italic;
         }
 
         a:hover {
@@ -227,16 +238,28 @@
         kanaTables.forEach(table => {
             const kanaLi = document.createElement("li");
             const kanaA = document.createElement("a");
+            const langSpan = document.createElement("span");
+            
+            kanaLi.classList.add("script-list-element");
+
+
+            langSpan.style.fontSize = ".5em";
+            langSpan.innerText = table.language;
+
+            langSpan.classList.add("script-lang-name");
 
             kanaA.innerText = table.name;
             kanaA.onclick = () => {
                 app.style.display = "";
                 selectList.style.display = "none";
                 backButton.style.display = "";
+                kanaContainer.style.paddingTop = table.padding;
+                lastField.style.paddingTop = table.padding;
                 start(table.table);
             }
 
             kanaLi.appendChild(kanaA);
+            kanaLi.appendChild(langSpan);
             selectList.appendChild(kanaLi);
 
         });
