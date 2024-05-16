@@ -37,20 +37,32 @@ const xokiinrimana = [
 	["ᒣ","mo"],["ᒻᒤ","mmoo"],["ᒥ","mi"],["ᒻᒦ","mmii"],["ᒧ","mu"],["ᒻᒨ","mmuu"],["ᒪ","ma"],["ᒻᒫ","mmaa"],["ᒻ","m"],
 	["ᓀ","no"],["ᓐᓁ","nnoo"],["ᓂ","ni"],["ᓐᓃ","nnii"],["ᓄ","nu"],["ᓐᓅ","nnuu"],["ᓇ","na"],["ᓐᓈ","nnaa"],["ᓐ","n"],
 	["ᙰ","bo","ngo"],["ᖖᒊ","bboo","nngoo"],["ᖏ","bi","ngi"],["ᙶ","bbii","nngii"],["ᖑ","bu","ngu"],["ᙴ","bbuu","nnguu"],["ᖓ","ba","nga"],["ᙶ","bbaa","nngaa"],["ᖕ","b","ng"],
-	["ᑦᓭ","tco"],["ᑦᓮ","tcoo"],["ᑦᓯ","tci"],["ᑦᓰ","tcii"],["ᑦᓱ","tcu"],["ᑦᓲ","tcuu"],["ᑦᓴ","tca"],["ᑦᓵ","tcaa"],["ᑦᔅ","tc"]
+	["ᑦᓭ","tco"],["ᑦᓮ","tcoo"],["ᑦᓯ","tci"],["ᑦᓰ","tcii"],["ᑦᓱ","tcu"],["ᑦᓲ","tcuu"],["ᑦᓴ","tca"],["ᑦᓵ","tcaa"],["ᑦᔅ","tc"]]
+
+const cyrillic = [
+	["",""]
 ]
+
+
+
 
 window.kanaTables = [
 	{
 		name: "Hiragana",
-		table: hiragana
+		table: hiragana,
+		language: "Japanese",
+		padding: "0"
 	},
 	{
 		name: "Katakana",
-		table: katakana
+		table: katakana,
+		language: "Japanese",
+		padding: "0"
 	},
 	{
 		name: "Xokiinrimana",
-		table: xokiinrimana
+		table: xokiinrimana,
+		language: "!Tlkara (conlang)",
+		padding: ".2em" // because they don't all fit inside their bounding box  
 	}
 ]
